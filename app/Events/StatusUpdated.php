@@ -15,7 +15,7 @@ class StatusUpdated implements ShouldBroadcast
 
     public string $modelName; // 'orders', 'payments', etc.
     public array $payload;
-    public int $userId;
+    public ?int $userId;
 
     public function __construct(Model $model)
     {
@@ -30,7 +30,7 @@ class StatusUpdated implements ShouldBroadcast
 
     public function broadcastOn(): \Illuminate\Broadcasting\PrivateChannel
     {
-        // Ensure yahan koi object null na ho
+        
         return new \Illuminate\Broadcasting\PrivateChannel("orders." . $this->userId);
     }
 

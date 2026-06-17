@@ -13,6 +13,9 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Permission\Traits\HasRoles;
 
+use App\Notifications\ResetAppPassword;
+
+
 class User extends Authenticatable implements HasMedia, HasAvatar
 {
     use Notifiable;
@@ -65,6 +68,11 @@ class User extends Authenticatable implements HasMedia, HasAvatar
     public function getFilamentAvatarUrl(): ?string
     {
         return $this->profile?->getFirstMediaUrl('avatar') ?: null;
+    }
+
+    public function sendPasswordResetNotification($token): void
+    {
+        dd('USER MODEL METHOD');
     }
 
    

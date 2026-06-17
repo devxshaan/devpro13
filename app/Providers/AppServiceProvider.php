@@ -7,8 +7,10 @@ use App\Models\Payment;
 use App\Models\Profile;
 use App\Models\Subscription;
 use App\Models\User;
+use App\Notifications\ResetAppPassword;
 use App\Observers\OrderObserver;
 use App\Observers\PaymentObserver;
+use Filament\Auth\Notifications\ResetPassword as FilamentResetPassword;
 use App\Observers\ProfileObserver;
 use App\Observers\UserObserver;
 use App\Policies\OrderPolicy;
@@ -28,6 +30,11 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->singleton(PaymentService::class);
         $this->app->singleton(\App\Services\CurrencyConverter::class);
+
+        $this->app->bind(
+            FilamentResetPassword::class,
+            ResetAppPassword::class,
+        );
     }
 
     
@@ -37,6 +44,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        
         User::observe(UserObserver::class);
         Profile::observe(ProfileObserver::class);
         Order::observe(OrderObserver::class);

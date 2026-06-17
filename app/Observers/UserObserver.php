@@ -6,16 +6,14 @@ use App\Events\StatusUpdated;
 use App\Models\User;
 use App\Services\Notify;
 
-
 class UserObserver
 {
-    // ── User Register ─────────────────────────────────────────
     public function created(User $user): void
     {
-        
+        // Critical — ye hamesha chalna chahiye
         $user->profile()->firstOrCreate(
             ['user_id' => $user->id],
-            [] 
+            []
         );
 
         $defaultRole = config('roles.default');
@@ -24,18 +22,17 @@ class UserObserver
                 $user->assignRole($defaultRole);
             }
         }
-        broadcast(new StatusUpdated($user, $user->id));
-        Notify::toAdmins(
-            "New user registered: {$user->name} ({$user->email})",
-            'info',
-            '/admin/users'
-        );
+
+        // Non-critical — try-catch mein, fail hone par bhi user creation nahi tootna chahiye
+        try {
+            broadcast(new StatusUpdated($user, $user->id));
+        } catch (\Throwable $e) {
+            report($e);
+        }
     }
 
-    
     public function updated(User $user): void
     {
-        
         if ($user->wasChanged('status')) {
             $oldStatus = $user->getOriginal('status');
             $newStatus = $user->status;
@@ -54,12 +51,16 @@ class UserObserver
                 'pending'  => 'info',
             ];
 
-            Notify::send(
-                $user,
-                $messages[$newStatus] ?? "Your account status has been updated to: {$newStatus}",
-                $types[$newStatus] ?? 'info',
-                '/portal/dashboard'
-            );
+            try {
+                Notify::send(
+                    $user,
+                    $messages[$newStatus] ?? "Your account status has been updated to: {$newStatus}",
+                    $types[$newStatus] ?? 'info',
+                    '/portal/dashboard'
+                );
+            } catch (\Throwable $e) {
+                report($e);
+            }
         }
     }
 }
