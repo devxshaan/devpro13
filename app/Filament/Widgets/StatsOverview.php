@@ -8,7 +8,7 @@ use App\Models\Payment;
 use App\Models\Setting;
 use App\Models\Subscription;
 use App\Models\User;
-use App\Services\CurrencyConverter;
+use Nexbolt\Core\Services\CurrencyConverter;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
