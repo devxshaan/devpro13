@@ -31,15 +31,29 @@ class Register extends BaseRegister
                             ->maxLength(255),
                     ]),
 
+                Grid::make(3)
+                ->schema([
+                TextInput::make('country_code')
+                ->label('Country Code')
+                ->default('91')
+                ->prefix('+')
+                ->numeric()
+                ->minLength(1)
+                ->columnSpan(1)
+                ->maxLength(4)
+                ->required(),
+
                 TextInput::make('phone')
-                    ->label('Phone Number')
-                    ->tel()
-                    ->telRegex('/^[+]?[0-9\s\-\(\)]{7,20}$/')
-                    ->prefix('+91')
-                    ->placeholder('9876543210')
-                    ->minLength(7)
-                    ->maxLength(20)
-                    ->nullable(),
+                ->label('Phone Number')
+                ->tel()
+                ->inputMode('numeric')
+                ->placeholder('412345678')
+                ->regex('/^[0-9]{6,15}$/')
+                ->minLength(6)
+                ->maxLength(15)
+                ->columnSpan(2)
+                ->required(),
+                ]),
 
                 $this->getEmailFormComponent(),
                 $this->getPasswordFormComponent(),
@@ -70,14 +84,16 @@ class Register extends BaseRegister
 
         $user = $user->fresh();
 
-        
+        $cleanCountryCode = ltrim($data['country_code'], '+');
+        $cleanPhone = ltrim($data['phone'], '0');
+        $fullPhoneNumber = '+' . $cleanCountryCode . $cleanPhone;
         $user->profile()->updateOrCreate(
         ['user_id' => $user->id],
             [
                 'first_name' => $data['first_name'] ?? null,
                 'last_name'  => $data['last_name'] ?? null,
                 'gender'     => $data['gender'] ?? null,
-                'phone'      => $data['phone'] ?? null,
+                'phone'      => $fullPhoneNumber ?? null,
             ]
         );
         
