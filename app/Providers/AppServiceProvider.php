@@ -7,17 +7,17 @@ use App\Models\Payment;
 use App\Models\Profile;
 use App\Models\Subscription;
 use App\Models\User;
-use App\Notifications\ResetAppPassword;
-use App\Observers\OrderObserver;
-use App\Observers\PaymentObserver;
+use Nexbolt\Core\Notifications\ResetAppPassword;
+use Nexbolt\Core\Observers\OrderObserver;
+use Nexbolt\Core\Observers\PaymentObserver;
 use Filament\Auth\Notifications\ResetPassword as FilamentResetPassword;
-use App\Observers\ProfileObserver;
-use App\Observers\UserObserver;
+use Nexbolt\Core\Observers\ProfileObserver;
+use Nexbolt\Core\Observers\UserObserver;
 use App\Policies\OrderPolicy;
 use App\Policies\PaymentPolicy;
 use App\Policies\ProfilePolicy;
 use App\Policies\SubscriptionPolicy;
-use App\Services\Payment\PaymentService;
+use Nexbolt\Core\Services\Payment\PaymentService;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
@@ -29,7 +29,7 @@ class AppServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(PaymentService::class);
-        $this->app->singleton(\App\Services\CurrencyConverter::class);
+        $this->app->singleton(\Nexbolt\Core\Services\CurrencyConverter::class);
 
         $this->app->bind(
             FilamentResetPassword::class,

@@ -32,6 +32,8 @@ class PortalPanelProvider extends PanelProvider
             ->login()
             ->registration(\App\Filament\Portal\Pages\Auth\Register::class)
             ->passwordReset()
+            ->homeUrl('/')
+            ->brandName('NexFlow')
             ->colors([
                 'primary' => Color::Indigo,
             ])

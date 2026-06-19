@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Observers\UserObserver;
-use App\Traits\GeneratesTokens;
+use Nexbolt\Core\Observers\UserObserver;
+use Nexbolt\Core\Traits\GeneratesTokens;
 use Filament\Models\Contracts\HasAvatar;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -13,7 +13,7 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Permission\Traits\HasRoles;
 
-use App\Notifications\ResetAppPassword;
+use Nexbolt\Core\Notifications\ResetAppPassword;
 
 
 class User extends Authenticatable implements HasMedia, HasAvatar

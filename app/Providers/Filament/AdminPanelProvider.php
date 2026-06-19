@@ -35,6 +35,8 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->profile(AdminProfile::class)
+            ->homeUrl('/')
+            ->brandName('NexFlow')
             ->colors([
                 'primary' => Color::Amber,
             ])

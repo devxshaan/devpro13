@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use App\Traits\GeneratesTokens;
-use App\Traits\HasConvertedPrice;
+use Nexbolt\Core\Traits\GeneratesTokens;
+use Nexbolt\Core\Traits\HasConvertedPrice;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;

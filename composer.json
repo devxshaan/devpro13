@@ -15,6 +15,7 @@
         "laravel/reverb": "^1.10",
         "laravel/tinker": "^3.0",
         "livewire/livewire": "^4.3",
+        "nexbolt/core": "dev-main",
         "razorpay/razorpay": "^2.9",
         "spatie/laravel-medialibrary": "^11.23",
         "spatie/laravel-permission": "^8.0",
@@ -93,5 +94,11 @@
         }
     },
     "minimum-stability": "stable",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "repositories": {
+        "nexbolt-core": {
+            "type": "path",
+            "url": "/home/venom/nexbolt-core"
+        }
+    }
 }

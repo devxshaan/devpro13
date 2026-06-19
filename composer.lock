@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "7104ff4f7413f9b66bd32520851fb857",
+    "content-hash": "7a4a4f0dc58be4c2df410aa0d51bacc1",
     "packages": [
         {
             "name": "akaunting/laravel-money",
@@ -4273,6 +4273,39 @@
                 "source": "https://github.com/nette/utils/tree/v4.1.4"
             },
             "time": "2026-05-11T20:49:54+00:00"
+        },
+        {
+            "name": "nexbolt/core",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "/home/venom/nexbolt-core",
+                "reference": "2ef14cf364d3d55e8206a3cd68c2ec5e0076d925"
+            },
+            "require": {
+                "laravel/framework": "^13.0",
+                "php": "^8.2"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Nexbolt\\Core\\NexboltCoreServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Nexbolt\\Core\\": "src/"
+                }
+            },
+            "license": [
+                "proprietary"
+            ],
+            "description": "Nexbolt Core - Private Business Logic",
+            "transport-options": {
+                "relative": false
+            }
         },
         {
             "name": "nikic/php-parser",
@@ -12175,7 +12208,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": {
+        "nexbolt/core": 20
+    },
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
