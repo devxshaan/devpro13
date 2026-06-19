@@ -65,4 +65,13 @@ class UserResource extends Resource
                 SoftDeletingScope::class,
             ]);
     }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->whereDoesntHave('roles', function ($query) {
+                
+                $query->where('name', 'super-admin');
+            });
+    }
 }

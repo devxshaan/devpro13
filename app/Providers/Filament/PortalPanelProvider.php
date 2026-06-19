@@ -2,6 +2,7 @@
 
 namespace App\Providers\Filament;
 
+use App\Models\Setting;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -19,12 +20,18 @@ use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class PortalPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
+        $favicon = Cache::remember('site_favicon', 3600, function () {
+            $setting = Setting::where('key', 'site_favicon')->first();
+            return $setting ? $setting->value : null;
+        });
         return $panel
             ->id('portal')
             ->path('portal')
@@ -38,7 +45,7 @@ class PortalPanelProvider extends PanelProvider
                 'primary' => Color::Indigo,
             ])
             ->spa()
-            
+            ->favicon($favicon ? Storage::url($favicon) : asset('images/favicon.png'))
             ->renderHook(
                 \Filament\View\PanelsRenderHook::HEAD_END,
                 fn() => \Illuminate\Support\Facades\Blade::render('@vite("resources/js/app.js")'),

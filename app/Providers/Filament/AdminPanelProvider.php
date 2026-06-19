@@ -4,6 +4,7 @@ namespace App\Providers\Filament;
 
 use App\Filament\Pages\AdminProfile;
 use App\Http\Middleware\RedirectCheckPoint;
+use App\Models\Setting;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -22,12 +23,18 @@ use Illuminate\Foundation\Http\Middleware\PreventRequestForgery;
 use Illuminate\Foundation\Vite;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
 class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
+        $favicon = Cache::remember('site_favicon', 3600, function () {
+            $setting = Setting::where('key', 'site_favicon')->first();
+            return $setting ? $setting->value : null;
+        });
         return $panel
             ->default()
             ->viteTheme('resources/css/filament/portal/theme.css')
@@ -41,6 +48,7 @@ class AdminPanelProvider extends PanelProvider
                 'primary' => Color::Amber,
             ])
             ->spa()
+            ->favicon($favicon ? Storage::url($favicon) : asset('images/favicon.png'))
             ->renderHook(
                 \Filament\View\PanelsRenderHook::HEAD_END,
                 fn() => \Illuminate\Support\Facades\Blade::render('@vite("resources/js/app.js")'),
