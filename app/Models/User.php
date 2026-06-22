@@ -2,18 +2,19 @@
 
 namespace App\Models;
 
-use Nexbolt\Core\Observers\UserObserver;
-use Nexbolt\Core\Traits\GeneratesTokens;
 use Filament\Models\Contracts\HasAvatar;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Nexbolt\Core\Notifications\ResetAppPassword;
+use Nexbolt\Core\Observers\UserObserver;
+use Nexbolt\Core\Traits\GeneratesTokens;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Permission\Traits\HasRoles;
-
-use Nexbolt\Core\Notifications\ResetAppPassword;
 
 
 class User extends Authenticatable implements HasMedia, HasAvatar
@@ -23,6 +24,7 @@ class User extends Authenticatable implements HasMedia, HasAvatar
     use HasRoles;
     use InteractsWithMedia;
     use GeneratesTokens;
+    use LogsActivity;
 
     // ── GeneratesTokens Config ────────────────────────────────
     public function getTokenColumnName(): string { return 'user_token_keyid'; }
@@ -73,6 +75,13 @@ class User extends Authenticatable implements HasMedia, HasAvatar
     public function sendPasswordResetNotification($token): void
     {
         dd('USER MODEL METHOD');
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnlyDirty()
+            ->logOnly(['name', 'email', 'status']);
     }
 
    

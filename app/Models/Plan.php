@@ -2,18 +2,21 @@
 
 namespace App\Models;
 
-use Nexbolt\Core\Traits\GeneratesTokens;
-use Nexbolt\Core\Traits\HasConvertedPrice;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
+use Nexbolt\Core\Traits\GeneratesTokens;
+use Nexbolt\Core\Traits\HasConvertedPrice;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 
 class Plan extends Model
 {
     use SoftDeletes;
     use GeneratesTokens;
     use HasConvertedPrice;
+    use LogsActivity;
 
     public function getKeyIdColumnName(): string { return 'plan_key'; }
     public function getKeyIdDigits(): int { return 8; }
@@ -79,13 +82,18 @@ class Plan extends Model
         return $this->hasMany(Subscription::class);
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | RULE
-    |--------------------------------------------------------------------------
-    | price = original currency only
-    | currency_snapshot = never change
-    | conversion = UI layer only
-    |--------------------------------------------------------------------------
-    */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnlyDirty()
+            ->logOnly([
+                'name',
+                'price',
+                'currency',
+                'billing_cycle',
+                'trial_days',
+                'is_active',
+                'is_featured',
+            ]);
+    }
 }

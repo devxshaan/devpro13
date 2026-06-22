@@ -2,15 +2,18 @@
 
 namespace App\Models;
 
-use Nexbolt\Core\Traits\GeneratesTokens;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Nexbolt\Core\Traits\GeneratesTokens;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 
 class Subscription extends Model
 {
     use SoftDeletes;
     use GeneratesTokens;
+    use LogsActivity;
 
     public function getKeyIdColumnName(): string { return 'subscription_key'; }
     public function getKeyIdDigits(): int { return 8; }
@@ -96,13 +99,19 @@ class Subscription extends Model
             && $this->trial_ends_at?->isFuture();
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | RULE (VERY IMPORTANT)
-    |--------------------------------------------------------------------------
-    | price_at_subscription = FINAL LOCKED PRICE
-    | currency_snapshot     = NEVER CHANGE
-    | plan changes = NEW SUBSCRIPTION ONLY
-    |--------------------------------------------------------------------------
-    */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnlyDirty()
+            ->logOnly([
+                'status',
+                'price_at_subscription',
+                'currency',
+                'starts_at',
+                'ends_at',
+                'cancelled_at',
+                'paused_at',
+                'resumed_at',
+            ]);
+    }
 }

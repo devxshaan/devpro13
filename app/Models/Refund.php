@@ -2,17 +2,20 @@
 
 namespace App\Models;
 
-use Nexbolt\Core\Traits\GeneratesTokens;
-use Nexbolt\Core\Traits\HasConvertedPrice;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Nexbolt\Core\Traits\GeneratesTokens;
+use Nexbolt\Core\Traits\HasConvertedPrice;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 
 class Refund extends Model
 {
     use SoftDeletes;
     use GeneratesTokens;
     use HasConvertedPrice;
+    use LogsActivity;
 
     public function getKeyIdColumnName(): string { return 'refund_key'; }
     public function getKeyIdPrefix(): ?string { return 'REF'; }
@@ -92,13 +95,16 @@ class Refund extends Model
         return $this->status === 'completed';
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | RULE
-    |--------------------------------------------------------------------------
-    | amount = original refund currency
-    | currency_snapshot = never change
-    | conversion = UI only
-    |--------------------------------------------------------------------------
-    */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnlyDirty()
+            ->logOnly([
+                'status',
+                'amount',
+                'reason',
+                'processed_at',
+                'failed_at',
+            ]);
+    }
 }

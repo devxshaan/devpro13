@@ -11,6 +11,7 @@ use Filament\Navigation\NavigationGroup;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
+use Illuminate\Support\Facades\Schema;
 use Filament\Support\Colors\Color;
 use Filament\View\PanelsRenderHook;
 use Filament\Widgets\AccountWidget;
@@ -28,10 +29,11 @@ class PortalPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
-        $favicon = Cache::remember('site_favicon', 3600, function () {
-            $setting = Setting::where('key', 'site_favicon')->first();
-            return $setting ? $setting->value : null;
-        });
+
+        $favicon = Schema::hasTable('settings')
+        ? Cache::remember('site_favicon', 3600, fn() => \App\Models\Setting::get('site_favicon'))
+        : null;
+        
         return $panel
             ->id('portal')
             ->path('portal')

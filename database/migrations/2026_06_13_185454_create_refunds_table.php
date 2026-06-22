@@ -42,7 +42,7 @@ return new class extends Migration
             $table->string('gateway')->nullable();
             $table->string('gateway_refund_id')->nullable();
             $table->json('gateway_response')->nullable();
-
+            $table->char('token', 36)->nullable();
             // ── Status ────────────────────────────────
             $table->enum('status', [
                 'pending',

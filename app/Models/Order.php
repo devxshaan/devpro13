@@ -2,18 +2,22 @@
 
 namespace App\Models;
 
-use Nexbolt\Core\Traits\GeneratesTokens;
-use Nexbolt\Core\Traits\HasConvertedPrice;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Nexbolt\Core\Traits\GeneratesTokens;
+use Nexbolt\Core\Traits\HasConvertedPrice;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
+
 
 class Order extends Model
 {
     use SoftDeletes;
     use GeneratesTokens;
     use HasConvertedPrice;
+    use LogsActivity;
 
     public function getKeyIdColumnName(): string { return 'order_key'; }
     public function getKeyIdPrefix(): ?string { return 'ORD'; }
@@ -94,11 +98,17 @@ class Order extends Model
         return $this->morphTo();
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | IMPORTANT RULE
-    |--------------------------------------------------------------------------
-    | Never convert totals here again for storage.
-    | Conversion ONLY for display layer (trait/service).
-    */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnlyDirty()
+            ->logOnly([
+                'status',
+                'total',
+                'fulfillment_type',
+                'confirmed_at',
+                'completed_at',
+                'cancelled_at',
+            ]);
+    }
 }

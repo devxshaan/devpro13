@@ -4,12 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+
 
 class Profile extends Model implements HasMedia
 {
     use InteractsWithMedia;
+    use LogsActivity;
 
     protected $fillable = [
         'user_id',
@@ -68,5 +72,17 @@ class Profile extends Model implements HasMedia
     public function getFilamentAvatarUrl(): ?string
     {
         return $this->getFirstMediaUrl('avatar') ?: null;
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnlyDirty()
+            ->logOnly([
+                'first_name',
+                'last_name',
+                'city',
+                'gender',
+            ]);
     }
 }

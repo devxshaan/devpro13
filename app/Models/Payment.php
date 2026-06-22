@@ -2,18 +2,22 @@
 
 namespace App\Models;
 
-use Nexbolt\Core\Traits\GeneratesTokens;
-use Nexbolt\Core\Traits\HasConvertedPrice;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Nexbolt\Core\Traits\GeneratesTokens;
+use Nexbolt\Core\Traits\HasConvertedPrice;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
+
 
 class Payment extends Model
 {
     use SoftDeletes;
     use GeneratesTokens;
     use HasConvertedPrice;
+    use LogsActivity;
 
     public function getKeyIdColumnName(): string { return 'payment_key'; }
     public function getKeyIdPrefix(): ?string { return 'PAY'; }
@@ -93,13 +97,19 @@ class Payment extends Model
         return $this->morphTo();
     }
 
-    /*
-    |--------------------------------------------------------------------------
-    | RULE
-    |--------------------------------------------------------------------------
-    | amount = ALWAYS base currency stored value
-    | conversion = ONLY display layer (trait/service)
-    | snapshot = never recompute later
-    |--------------------------------------------------------------------------
-    */
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnlyDirty()
+            ->logOnly([
+                'status',
+                'amount',
+                'amount_refunded',
+                'gateway',
+                'gateway_payment_id',
+                'paid_at',
+                'refunded_at',
+                'failed_at',
+            ]);
+    }
 }
