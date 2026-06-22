@@ -26,31 +26,35 @@ class Refund extends Model
         'user_id',
         'payment_id',
         'order_id',
+        'requested_by',
+        'approved_by',
         'processed_by',
-
-        // money
         'amount',
         'currency',
         'status',
-
+        'refund_type',
+        'initiated_via',
+        'gateway',
         'gateway_response',
-
         'reason',
-
+        'notes',
+        'requested_at',
+        'approved_at',
         'processed_at',
         'failed_at',
-
         'metadata',
     ];
 
     protected $casts = [
         'gateway_response' => 'array',
-        'metadata'         => 'array',
+        'metadata'          => 'array',
 
-        'amount'           => 'decimal:2',
+        'amount'            => 'decimal:2',
 
-        'processed_at'     => 'datetime',
-        'failed_at'        => 'datetime',
+        'requested_at'      => 'datetime',
+        'approved_at'       => 'datetime',
+        'processed_at'      => 'datetime',
+        'failed_at'         => 'datetime',
     ];
 
     protected static function booted(): void
@@ -84,6 +88,16 @@ class Refund extends Model
         return $this->belongsTo(Order::class);
     }
 
+    public function requestedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'requested_by');
+    }
+
+    public function approvedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'approved_by');
+    }
+
     public function processedBy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'processed_by');
@@ -95,6 +109,11 @@ class Refund extends Model
         return $this->status === 'completed';
     }
 
+    public function isPending(): bool
+    {
+        return in_array($this->status, ['requested', 'pending', 'approved']);
+    }
+
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults()
@@ -102,7 +121,10 @@ class Refund extends Model
             ->logOnly([
                 'status',
                 'amount',
+                'refund_type',
                 'reason',
+                'requested_at',
+                'approved_at',
                 'processed_at',
                 'failed_at',
             ]);

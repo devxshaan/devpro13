@@ -61,6 +61,13 @@ class InstallationSeeder extends Seeder
 
             'payments.refund',
 
+            // Refunds 
+            'refunds.view',
+            'refunds.request',
+            'refunds.approve',
+            'refunds.process',
+            'refunds.full-access',
+
             // Subscriptions
             'subscriptions.view.own',
             'subscriptions.view.any',
@@ -129,6 +136,11 @@ class InstallationSeeder extends Seeder
             'payments.view.any',
             'payments.refund',
 
+            // Refunds — Manager
+            'refunds.view',
+            'refunds.approve',
+            'refunds.process',
+
             'subscriptions.view.any',
             'subscriptions.cancel',
 
@@ -152,15 +164,17 @@ class InstallationSeeder extends Seeder
 
             'profile.view',
             'profile.edit',
-            
+
             'plans.view',
-            
 
             'orders.view.any',
             'orders.create',
             'orders.edit.any',
 
             'payments.view.any',
+
+            'refunds.view',
+            'refunds.process',
 
             'subscriptions.view.any',
         ]);
@@ -187,6 +201,10 @@ class InstallationSeeder extends Seeder
             'orders.cancel.own',
 
             'payments.view.own',
+
+            // Refunds — customer
+            'refunds.request',
+            'refunds.view',
 
             'subscriptions.view.own',
         ]);

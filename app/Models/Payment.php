@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Nexbolt\Core\Traits\GeneratesTokens;
@@ -95,6 +96,11 @@ class Payment extends Model
     public function payable(): MorphTo
     {
         return $this->morphTo();
+    }
+
+    public function refunds(): HasMany
+    {
+        return $this->hasMany(Refund::class);
     }
 
     public function getActivitylogOptions(): LogOptions

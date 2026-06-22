@@ -28,11 +28,31 @@ return new class extends Migration
                 ->constrained('orders')
                 ->onDelete('restrict');
 
+            $table->foreignId('requested_by')
+                ->nullable()
+                ->constrained('users')
+                ->onDelete('restrict');
+
+            $table->foreignId('approved_by')
+                ->nullable()
+                ->constrained('users')
+                ->onDelete('restrict');
+
+            $table->foreignId('processed_by')
+                ->nullable()
+                ->constrained('users')
+                ->onDelete('restrict');
+
             // ── AMOUNT (FIXED FOR SAAS) ────────────────
             $table->decimal('amount', 10, 2);
-
-            // FIX: currency should never be nullable
             $table->string('currency', 3)->default('USD');
+
+            // ── Type & Source ──────────────────────────
+            $table->enum('refund_type', ['gateway', 'manual', 'store_credit'])
+                ->default('gateway');
+
+            $table->enum('initiated_via', ['user_request', 'admin_manual', 'system_auto'])
+                ->default('admin_manual');
 
             // ── Reason ────────────────────────────────
             $table->string('reason')->nullable();
@@ -43,22 +63,22 @@ return new class extends Migration
             $table->string('gateway_refund_id')->nullable();
             $table->json('gateway_response')->nullable();
             $table->char('token', 36)->nullable();
+
             // ── Status ────────────────────────────────
             $table->enum('status', [
+                'requested',
                 'pending',
+                'approved',
                 'processing',
                 'completed',
+                'rejected',
                 'failed',
                 'cancelled',
             ])->default('pending');
 
-            // ── Processor ─────────────────────────────
-            $table->foreignId('processed_by')
-                ->nullable()
-                ->constrained('users')
-                ->onDelete('restrict');
-
             // ── Timeline ──────────────────────────────
+            $table->timestamp('requested_at')->nullable();
+            $table->timestamp('approved_at')->nullable();
             $table->timestamp('processed_at')->nullable();
             $table->timestamp('failed_at')->nullable();
 
@@ -68,7 +88,7 @@ return new class extends Migration
             $table->timestamps();
             $table->softDeletes();
 
-            // ── INDEXES (IMPORTANT FIX) ───────────────
+            // ── INDEXES ────────────────────────────────
             $table->index(['user_id', 'status']);
             $table->index(['payment_id']);
             $table->index(['order_id']);

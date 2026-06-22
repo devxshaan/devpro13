@@ -48,6 +48,16 @@ class SettingsSeeder extends Seeder
                 'group'       => 'general',
                 'sort_order'  => 4,
             ],
+            [
+                'key'         => 'allow_user_refund_requests',
+                'value'       => '0',
+                'label'       => 'Allow Users to Request Refunds',
+                'description' => 'If enabled, customers can request refunds for their completed payments directly from the portal. If disabled, refunds can only be initiated by admin/staff.',
+                'type'        => 'boolean',
+                'group'       => 'payments',
+                'is_deletable'=> false,
+                'sort_order'  => 1,
+            ],
 
             // ── Appearance ────────────────────────────────────
             [
@@ -88,6 +98,29 @@ class SettingsSeeder extends Seeder
                 'type'        => 'text',
                 'group'       => 'currency',
                 'sort_order'  => 2,
+            ],
+            [
+                'key'   => 'refund_subscription_policy',
+                'value' => 'no_change',
+                'label' => 'Subscription Policy on Partial Refund',
+                'description' => 'Determines what happens to an active subscription when a partial refund is processed: no_change (access continues as-is), proportional (remaining access days reduced proportionally), or threshold (subscription cancelled if refund percentage exceeds the threshold).',
+                'type'  => 'select',
+                'options' => [
+                    'no_change'    => 'No Change (goodwill refund)',
+                    'proportional' => 'Reduce Access Proportionally',
+                    'threshold'    => 'Cancel if Refund Exceeds Threshold',
+                ],
+                'group' => 'payment',
+                'sort_order' => 9,
+            ],
+            [
+                'key'   => 'refund_cancellation_threshold',
+                'value' => '50',
+                'label' => 'Refund Cancellation Threshold (%)',
+                'description' => 'Used only when policy is "threshold". If the refunded percentage of a payment meets or exceeds this value, the subscription is cancelled.',
+                'type'  => 'number',
+                'group' => 'payment',
+                'sort_order' => 10,
             ],
 
             // ── Payment Gateways ──────────────────────────────

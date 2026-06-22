@@ -21,6 +21,11 @@
                         <p class="font-bold text-lg text-gray-900 dark:text-white">
                             {{ $payment->formatted_amount }}
                         </p>
+                        @if($payment->amount_refunded > 0)
+                            <p class="text-xs text-orange-500">
+                                Refunded: {{ $payment->amount_refunded }}
+                            </p>
+                        @endif
                     </div>
 
                     {{-- Status --}}
@@ -50,6 +55,33 @@
                         <p class="text-sm text-gray-700 dark:text-gray-300">
                             {{ ($payment->paid_at ?? $payment->created_at)->format('d M Y') }}
                         </p>
+                    </div>
+
+                    {{-- Refund Action --}}
+                    <div>
+                        @if($payment->status === 'completed' && $payment->amount_refunded < $payment->amount && $this->refundsEnabled)
+                            @php
+                                $existingRequest = $payment->refunds()
+                                    ->whereIn('status', ['requested', 'pending', 'approved', 'processing'])
+                                    ->first();
+                            @endphp
+
+                            @if($existingRequest)
+                                <span class="px-3 py-1 rounded-full text-xs font-semibold bg-blue-100 text-blue-700">
+                                    Refund {{ ucfirst($existingRequest->status) }}
+                                </span>
+                            @else
+                                <x-filament::button
+                                    size="sm"
+                                    color="danger"
+                                    outlined
+                                    wire:click="requestRefund({{ $payment->id }})"
+                                    wire:confirm="Are you sure you want to request a refund for this payment?"
+                                >
+                                    Request Refund
+                                </x-filament::button>
+                            @endif
+                        @endif
                     </div>
                 </div>
             </div>
