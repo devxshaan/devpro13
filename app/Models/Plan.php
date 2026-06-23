@@ -96,4 +96,9 @@ class Plan extends Model
                 'is_featured',
             ]);
     }
+
+    public function getRouteKeyName(): string
+    {
+        return 'plan_key';
+    }
 }

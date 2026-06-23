@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 use Nexbolt\Core\Notifications\ResetAppPassword;
 use Nexbolt\Core\Observers\UserObserver;
 use Nexbolt\Core\Traits\GeneratesTokens;
@@ -25,6 +26,7 @@ class User extends Authenticatable implements HasMedia, HasAvatar
     use InteractsWithMedia;
     use GeneratesTokens;
     use LogsActivity;
+    use HasApiTokens;
 
     // ── GeneratesTokens Config ────────────────────────────────
     public function getTokenColumnName(): string { return 'user_token_keyid'; }

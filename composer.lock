@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5b95d64691f4f492fa89ec0ea21c5183",
+    "content-hash": "3433211b677437a51096347aa2238567",
     "packages": [
         {
             "name": "akaunting/laravel-money",
@@ -4343,7 +4343,7 @@
             "dist": {
                 "type": "path",
                 "url": "/home/venom/nexbolt-core",
-                "reference": "424e06c23e88cf237ab65bc636f065cecbe3ecf4"
+                "reference": "5c2498874d1cb05e2607a173c8367fc4da4856f7"
             },
             "require": {
                 "laravel/framework": "^13.0",

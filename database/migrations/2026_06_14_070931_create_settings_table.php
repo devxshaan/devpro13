@@ -22,6 +22,7 @@ return new class extends Migration
             $table->string('group')->default('general');
             $table->boolean('is_deletable')->default(false);
             $table->unsignedInteger('sort_order')->default(0);
+            $table->foreignId('tenant_id')->nullable()->constrained('tenants')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -28,6 +28,7 @@ return new class extends Migration
             $table->boolean('is_phone_private')->default(true);
             $table->boolean('is_dob_private')->default(true);
             $table->boolean('is_address_private')->default(true);
+            $table->foreignId('tenant_id')->nullable()->constrained('tenants')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });

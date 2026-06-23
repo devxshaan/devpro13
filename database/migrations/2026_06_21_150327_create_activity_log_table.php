@@ -17,6 +17,7 @@ return new class extends Migration
             $table->nullableMorphs('causer', 'causer');
             $table->json('attribute_changes')->nullable();
             $table->json('properties')->nullable();
+            $table->foreignId('tenant_id')->nullable()->constrained('tenants')->onDelete('cascade');
             $table->timestamps();
         });
     }

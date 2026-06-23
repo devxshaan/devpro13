@@ -67,7 +67,7 @@ return new class extends Migration
             $table->text('admin_notes')->nullable();
             $table->string('ip_address')->nullable();
             $table->json('metadata')->nullable();
-
+            $table->foreignId('tenant_id')->nullable()->constrained('tenants')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
 

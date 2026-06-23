@@ -22,6 +22,7 @@ return new class extends Migration
             $table->rememberToken();
             $table->enum('status', ['active', 'inactive', 'banned', 'pending'])
             ->default('pending');
+            $table->foreignId('tenant_id')->nullable()->constrained('tenants')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
         });

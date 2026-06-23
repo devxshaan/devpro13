@@ -84,7 +84,7 @@ return new class extends Migration
 
             // ── Extra ────────────────────────────────
             $table->json('metadata')->nullable();
-
+            $table->foreignId('tenant_id')->nullable()->constrained('tenants')->onDelete('cascade');
             $table->timestamps();
             $table->softDeletes();
 
