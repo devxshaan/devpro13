@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\InvoiceController;
 use App\Http\Controllers\HomeController;
 use Illuminate\Support\Facades\Route;
 
@@ -21,3 +22,4 @@ Route::get('/payment/cancel', [\App\Http\Controllers\CheckoutController::class, 
 Route::post('/payment/razorpay/verify', [\App\Http\Controllers\CheckoutController::class, 'verifyRazorpay'])
      ->middleware('auth');
 
+Route::get('/my-invoices', [InvoiceController::class, 'index']);

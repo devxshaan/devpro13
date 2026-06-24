@@ -3,7 +3,9 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CheckoutController;
 use App\Http\Controllers\Api\DashboardController;
+use App\Http\Controllers\Api\InvoiceController;
 use App\Http\Controllers\Api\PlanController;
+use App\Http\Controllers\Api\RefundController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function () {
@@ -31,5 +33,8 @@ Route::prefix('v1')->group(function () {
         Route::get('/my-payments', [DashboardController::class, 'payments']);
         Route::get('/my-subscriptions', [DashboardController::class, 'subscriptions']);
         Route::get('/my-active-subscription', [DashboardController::class, 'activeSubscription']);
+        Route::get('/my-invoices', [InvoiceController::class, 'index']);
+        Route::post('/payments/{payment}/refund-request', [RefundController::class, 'request']);
+
     });
 });

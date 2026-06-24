@@ -29,16 +29,20 @@ class DashboardController extends Controller
     public function payments(Request $request)
     {
         $payments = Payment::where('user_id', $request->user()->id)
+            ->with('refunds')
             ->latest()
             ->get()
             ->map(fn (Payment $payment) => [
-                'payment_key'     => $payment->payment_key,
-                'amount'          => $payment->amount,
-                'amount_refunded' => $payment->amount_refunded,
-                'currency'        => $payment->currency,
-                'status'          => $payment->status,
-                'gateway'         => $payment->gateway,
-                'paid_at'         => $payment->paid_at,
+                'payment_key'      => $payment->payment_key,
+                'amount'           => $payment->amount,
+                'amount_refunded'  => $payment->amount_refunded,
+                'currency'         => $payment->currency,
+                'status'           => $payment->status,
+                'gateway'          => $payment->gateway,
+                'paid_at'          => $payment->paid_at,
+                'has_pending_refund' => $payment->refunds()
+                    ->whereIn('status', ['requested', 'pending', 'approved', 'processing'])
+                    ->exists(),
             ]);
 
         return response()->json($payments);
@@ -81,4 +85,6 @@ class DashboardController extends Controller
             'ends_at'   => $active->ends_at,
         ]);
     }
+
+    
 }
