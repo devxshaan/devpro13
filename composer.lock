@@ -4642,7 +4642,7 @@
             "dist": {
                 "type": "path",
                 "url": "/home/venom/nexbolt-core",
-                "reference": "5c2498874d1cb05e2607a173c8367fc4da4856f7"
+                "reference": "b8f4e3de9b5aa9c566b4a3a47394be5fc546f404"
             },
             "require": {
                 "laravel/framework": "^13.0",

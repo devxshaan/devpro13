@@ -68,6 +68,15 @@ class InstallationSeeder extends Seeder
             'refunds.process',
             'refunds.full-access',
 
+            // Invoices
+            'invoices.view.own',
+            'invoices.view.any',
+
+            'invoices.create',
+            'invoices.edit',
+            'invoices.delete',
+            'invoices.download',
+
             // Subscriptions
             'subscriptions.view.own',
             'subscriptions.view.any',
@@ -141,6 +150,13 @@ class InstallationSeeder extends Seeder
             'refunds.approve',
             'refunds.process',
 
+            // Invoices — Manager
+            'invoices.view.any',
+            'invoices.create',
+            'invoices.edit',
+            'invoices.delete',
+            'invoices.download',
+
             'subscriptions.view.any',
             'subscriptions.cancel',
 
@@ -176,6 +192,11 @@ class InstallationSeeder extends Seeder
             'refunds.view',
             'refunds.process',
 
+            // Invoices — Cashier
+            'invoices.view.any',
+            'invoices.create',
+            'invoices.download',
+
             'subscriptions.view.any',
         ]);
 
@@ -205,6 +226,10 @@ class InstallationSeeder extends Seeder
             // Refunds — customer
             'refunds.request',
             'refunds.view',
+
+            // Invoices — customer
+            'invoices.view.own',
+            'invoices.download',
 
             'subscriptions.view.own',
         ]);
